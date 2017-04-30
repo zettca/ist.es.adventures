@@ -1,3 +1,4 @@
+.idea
 .classpath
 .project
 .settings
@@ -6,5 +7,6 @@ fenix-framework.properties
 jmeter.log
 *.jtl
 *.log
+*.iml
 infer-out
 .DS_Store
