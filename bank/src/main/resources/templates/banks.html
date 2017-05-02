@@ -15,6 +15,31 @@
         <h2>Welcome to Banks' Manager</h2>
     </div>
     <div class="row">
+        <h3>Create a new Bank</h3>
+    </div>
+    <div class="row">
+        <p class="text-danger col-md-6" th:text="${error}">Error</p>
+    </div>
+    <div class="row">
+        <form class="form-inline" th:action="@{/banks}" th:object="${bank}" method="post">
+            <div class="form-group">
+                <label>
+                    <span>Name: </span>
+                    <input class="form-control" type="text" th:field="*{name}"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span>Code: </span>
+                    <input class="form-control" type="text" th:field="*{code}"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+            </div>
+        </form>
+    </div>
+    <div class="row">
         <h3>Existing Banks</h3>
     </div>
     <div class="row">
