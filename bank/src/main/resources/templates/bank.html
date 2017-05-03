@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Banks Manager</title>
+    <title>Bank Manager</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
@@ -12,26 +12,23 @@
 <body>
 <div class="container">
     <div class="row">
-        <h2>Banks' Manager</h2>
+        <h2>
+            <span th:text="${bank.name}">Bank</span> Manager
+        </h2>
     </div>
     <div class="row">
-        <h3>Create a new Bank</h3>
+        <h3>Create a new Client</h3>
     </div>
     <div class="row">
         <p class="text-danger col-md-6" th:text="${error}">Error</p>
     </div>
     <div class="row">
-        <form class="form-inline" th:action="@{/banks}" th:object="${bank}" method="post">
+        <form class="form-inline" th:action="@{/banks/{code}(code=${bank.code})}" th:object="${client}"
+              method="post">
             <div class="form-group">
                 <label>
                     <span>Name: </span>
                     <input class="form-control" type="text" th:field="*{name}"/>
-                </label>
-            </div>
-            <div class="form-group">
-                <label>
-                    <span>Code: </span>
-                    <input class="form-control" type="text" th:field="*{code}"/>
                 </label>
             </div>
             <div class="form-group">
@@ -40,7 +37,7 @@
         </form>
     </div>
     <div class="row">
-        <h3>Existing Banks</h3>
+        <h3>Existing Clients</h3>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -48,15 +45,13 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Code</th>
                     <th>Page</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="bank: ${banks}">
-                    <td th:text="${bank.name}">Name</td>
-                    <td th:text="${bank.code}">Code</td>
-                    <td><a th:href="@{/banks/{code}(code=${bank.code})}">Page</a></td>
+                <tr th:each="client: ${clients}">
+                    <td th:text="${client.name}">Name</td>
+                    <td><a th:href="@{/banks/{code}/clients/{cid}(code=${bank.code}, cid=${client.id})}">Page</a></td>
                 </tr>
                 </tbody>
             </table>

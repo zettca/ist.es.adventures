@@ -3,24 +3,23 @@ package pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects;
 import pt.ulisboa.tecnico.softeng.bank.domain.Client;
 
 public class BankClientData {
-
-    private String code;
+    private String id;
     private String name;
 
     public BankClientData() {
     }
 
     public BankClientData(Client client) {
-        this.code = client.getBank().getCode();
+        this.id = client.getID();
         this.name = client.getName();
     }
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
