@@ -12,6 +12,7 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
+import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 
 @Controller
 @RequestMapping(value = "/banks/{bankCode}")
@@ -28,11 +29,13 @@ public class BankController {
             model.addAttribute("bank", bankData);
             model.addAttribute("client", new BankClientData());
             model.addAttribute("clients", bankData.getClients());
+            model.addAttribute("operation", new BankOperationData());
+            model.addAttribute("operations", bankData.getOperations());
             return "bank";
         } else {
             model.addAttribute("error", "Error: there is no bank with code " + bankCode);
             model.addAttribute("bank", new BankData());
-            model.addAttribute("banks", BankInterface.getBanks());
+            model.addAttribute("client", new BankClientData());
             return "banks";
         }
     }

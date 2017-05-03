@@ -57,6 +57,33 @@
             </table>
         </div>
     </div>
+    <div class="row">
+        <h3>Existing Operations</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Reference</th>
+                    <th>IBAN</th>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="op: ${operations}">
+                    <td th:text="${op.reference}">Name</td>
+                    <td th:text="${op.iban}">Name</td>
+                    <td th:text="${op.time}">Name</td>
+                    <td th:text="${op.type}">Name</td>
+                    <td th:text="${op.value}">Name</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>
