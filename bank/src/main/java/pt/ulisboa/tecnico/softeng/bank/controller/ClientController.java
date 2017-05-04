@@ -14,7 +14,7 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountDat
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
 @Controller
-@RequestMapping(value = "/banks/{bankCode}")
+@RequestMapping(value = "/banks/{bankCode}/clients/{id}")
 public class ClientController {
     private static Logger logger = LoggerFactory.getLogger(BanksController.class);
 
