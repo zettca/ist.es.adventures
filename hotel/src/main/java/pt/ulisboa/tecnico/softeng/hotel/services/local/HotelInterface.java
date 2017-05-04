@@ -10,14 +10,42 @@ import org.joda.time.LocalDate;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
+import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Booking;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
+import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
+import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData.CopyDepth;
 
 public class HotelInterface {
 
+	@Atomic(mode = TxMode.READ)
+	public static List<HotelData> getHotels() {
+		List<HotelData> hotels = new ArrayList<>();
+		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
+			hotels.add(new HotelData(hotel, CopyDepth.SHALLOW));
+		}
+		return hotels;
+	}
+
+	@Atomic(mode = TxMode.WRITE)
+	public static void createHotel(HotelData hotelData) {
+		new Hotel(hotelData.getName(), hotelData.getCode());
+	}
+
+	@Atomic(mode = TxMode.READ)
+	public static HotelData getHotelDataByCode(String hotelCode, CopyDepth depth) {
+		Hotel hotel = getHotelByCode(hotelCode);
+
+		if (hotel != null) {
+			return new HotelData(hotel, depth);
+		} else {
+			return null;
+		}
+	}
+	
 	@Atomic(mode = TxMode.WRITE)
 	public static String reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure) {
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
@@ -72,6 +100,15 @@ public class HotelInterface {
 		return references;
 	}
 
+	private static Hotel getHotelByCode(String code) {
+		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
+			if (hotel.getCode().equals(code)) {
+				return hotel;
+			}
+		}
+		return null;
+	}
+	
 	static List<Room> getAvailableRooms(int number, LocalDate arrival, LocalDate departure) {
 		List<Room> availableRooms = new ArrayList<>();
 		for (Hotel hotel : FenixFramework.getDomainRoot().getHotelSet()) {
