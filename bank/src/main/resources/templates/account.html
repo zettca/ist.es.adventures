@@ -1,44 +1,28 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Banks Manager</title>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
-    <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+<title>Account</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <h2>Banks' Manager</h2>
-    </div>
-    <div class="row">
-        <h3>Create a new Account</h3>
-    </div>
-    <div class="row">
-        <p class="text-danger col-md-6" th:text="${error}">Error</p>
-    </div>
-    <div class="row">
-        <form class="form-inline" th:action="@{/banks}" th:object="${bank}" method="post">
-            <div class="form-group">
-                <label>
-                    <span>Client: </span>
-                    <input class="form-control" type="text" th:field="*{client}"/>
-                </label>
-            </div>
-            <div class="form-group">
-                <label>
-                    <span>Bank: </span>
-                    <input class="form-control" type="text" th:field="*{bank}"/>
-                </label>
-            </div>
-            <div class="form-group">
-                <input class="btn btn-primary" type="submit" value="Submit"/>
-            </div>
-        </form>
-    </div>
-</div>
+	<div class="container">
+		<h2>
+			Bank Manager
+		</h2>
+		<br/>
+		<h3>Operations in Account</h3>
+		<p class="text-danger" th:text="${error}">Error</p>
+		<form class="form-inline" th:action="@{/banks/{bankCode}/clients/account}" th:object="${operation}" method="post">
+			<label>Account: </label> <input class="form-control" type="text" th:field="*{account.id}" /> 
+			<label>Deposit: </label> <input class="form-control" type="text" th:field="*{deposit}" /> 
+			<label>Withdraw: </label> <input class="form-control" type="text" th:field="*{withdraw}" /> 
+			<input class="btn btn-primary" type="submit" value="Submit" />
+		</form>
+		<br/>
+	</div>
 </body>
 </html>
