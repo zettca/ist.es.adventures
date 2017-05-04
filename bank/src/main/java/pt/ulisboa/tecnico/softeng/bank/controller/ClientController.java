@@ -13,28 +13,51 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
-
 @Controller
 @RequestMapping(value = "/banks/{bankCode}")
 public class ClientController {
     private static Logger logger = LoggerFactory.getLogger(BanksController.class);
 
-   
+    @RequestMapping(method = RequestMethod.GET)
+    public String clientForm(Model model, @PathVariable String bankCode) {
+        logger.info("accountForm account:{}", bankCode);
+
+        BankData bankData = BankInterface.getBankDataByCode(bankCode, BankData.CopyDepth.CLIENTS);
+
+        if (bankData != null) {
+            model.addAttribute("bank", bankData);
+            model.addAttribute("account", new BankAccountData());
+            model.addAttribute("accounts", bankData.getAccounts());
+            return "bank";
+        } else {
+            model.addAttribute("error", "Error: there is no bank with code " + bankCode);
+            model.addAttribute("bank", new BankData());
+            model.addAttribute("client", new BankClientData());
+            model.addAttribute("account", new BankAccountData());
+            return "banks";
+        }
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    public String accountSubmit(Model model, @PathVariable String bankCode, BankOperationData type, BankAccountData accountData, BankOperationData value) {
-        logger.info("accountSubmit operationType:{} accountName:{} value:{}", type.getType(), accountData.getId(), value.getValue());
+    public String accountSubmit(Model model, @PathVariable String bankCode, @ModelAttribute BankClientData clientData) {
+        logger.info("accountSubmit bankCode:{} client:{}", bankCode, clientData.getName());
 
         try {
-            BankInterface.createAccount(bankCode, accountData);
+            BankInterface.createAccount(bankCode, BankAccountData());
         } catch (BankException be) {
             model.addAttribute("error", "Error: it was not possible to create the account");
             be.printStackTrace();
-            model.addAttribute("account", accountData);
-           // fix:  model.addAttribute("client", BankInterface.getClientByID(bankCode, accountData.getId()));
-            return "client";
+            model.addAttribute("id", BankAccountData().getId());
+            model.addAttribute("iban", BankAccountData().getIban());
+            model.addAttribute("balance", BankAccountData().getBalance());
+            return "bank";
         }
 
         return "redirect:/banks/" + bankCode;
     }
+
+	private BankAccountData BankAccountData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
