@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HotelData {
     public enum CopyDepth {
-        HOTELS, ROOMS, BOOKINGS
+        HOTELS, ROOMS, BOOKINGS, SHALLOW
     }
 
     private String name;
@@ -28,6 +28,8 @@ public class HotelData {
         		break;
         	case BOOKINGS:
                 break;
+        	case SHALLOW:
+        		break;
             default:
                 break;
         }
