@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HotelData {
     public enum CopyDepth {
-        SHALLOW, ACCOUNTS, ROOMS, OPERATIONS
+        HOTELS, ROOMS, BOOKINGS
     }
 
     private String name;
@@ -22,8 +22,11 @@ public class HotelData {
     	this.name = hotel.getName();
         
         switch (depth) {
-     
-            case SHALLOW:
+        	case HOTELS:
+        		break;
+        	case ROOMS:
+        		break;
+        	case BOOKINGS:
                 break;
             default:
                 break;
