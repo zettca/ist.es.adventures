@@ -22,6 +22,25 @@
 			<input class="btn btn-primary" type="submit" value="Submit" />
 		</form>
 		<br/>
+		<h3>List of Bookings</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Room Type</th>
+					<th>Room Number</th>
+					<th>Arrival Date</th>
+					<th>Departure Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="booking: ${booking}">
+					<td th:text="${booking.room.type}">Room Type</td>
+					<td th:text="${booking.room.number}">Room Number</td>
+					<td th:text="${booking.arrival}">Arrival Date</td>
+					<td th:text="${booking.departure}">Departure Date</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </body>
 </html>
