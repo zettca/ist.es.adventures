@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.LocalDate;
@@ -13,9 +14,36 @@ import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider;
 import pt.ulisboa.tecnico.softeng.activity.domain.Booking;
 import pt.ulisboa.tecnico.softeng.activity.exception.ActivityException;
 import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityReservationData;
+import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityProviderData;
+import pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects.ActivityProviderData.CopyDepth;
 
 public class ActivityInterface {
+	
+	@Atomic(mode = TxMode.READ)
+	public static List<ActivityProviderData> getActivityProviders() {
+		List<ActivityProviderData> activityProviders = new ArrayList<>();
+		for (ActivityProvider activityProvider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
+			activityProviders.add(new ActivityProviderData(activityProvider, CopyDepth.SHALLOW));
+		}
+		return activityProviders;
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	public static void createActivityProvider(ActivityProviderData activityProviderData) {
+		new ActivityProvider(activityProviderData.getName(), activityProviderData.getCode());
+	}
+	
+	@Atomic(mode = TxMode.READ)
+	public static ActivityProviderData getActivityProviderDataByCode(String activityProviderCode, CopyDepth depth) {
+		ActivityProvider activityProvider = getActivityProviderByCode(activityProviderCode);
 
+		if (activityProvider != null) {
+			return new ActivityProviderData(activityProvider, depth);
+		} else {
+			return null;
+		}
+	}
+	
 	@Atomic(mode = TxMode.WRITE)
 	public static String reserveActivity(LocalDate begin, LocalDate end, int age) {
 		List<ActivityOffer> offers;
@@ -50,6 +78,15 @@ public class ActivityInterface {
 			}
 		}
 		throw new ActivityException();
+	}
+	
+	private static ActivityProvider getActivityProviderByCode(String code) {
+		for (ActivityProvider activityProvider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
+			if (activityProvider.getCode().equals(code)) {
+				return activityProvider;
+			}
+		}
+		return null;
 	}
 
 	private static Booking getBookingByReference(String reference) {
