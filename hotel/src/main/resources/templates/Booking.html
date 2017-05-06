@@ -16,7 +16,7 @@
 		<br/>
 		<h3>Bookings in Room</h3>
 		<p class="text-danger" th:text="${error}">Error</p>
-		<form class="form-inline" th:action="@{/hotels/{hotelCode}/rooms/room}" th:object="${booking}" method="post">
+		<form class="form-inline" th:action="@{/hotels/{hotelCode}/rooms/{roomNumber}}" th:object="${booking}" method="post">
 			<label>Arrival: </label> <input class="form-control" type="text" th:field="*{booking.arrival}" /> 
 			<label>Departure: </label> <input class="form-control" type="text" th:field="*{booking.departure}" /> 
 			<input class="btn btn-primary" type="submit" value="Submit" />
@@ -26,18 +26,18 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Room Type</th>
-					<th>Room Number</th>
-					<th>Arrival Date</th>
-					<th>Departure Date</th>
+					<th>RoomType</th>
+					<th>RoomNumber</th>
+					<th>ArrivalDate</th>
+					<th>DepartureDate</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="booking: ${booking}">
-					<td th:text="${booking.room.type}">Room Type</td>
-					<td th:text="${booking.room.number}">Room Number</td>
-					<td th:text="${booking.arrival}">Arrival Date</td>
-					<td th:text="${booking.departure}">Departure Date</td>
+					<td th:text="${booking.room.type}">RoomType</td>
+					<td th:text="${booking.room.number}">RoomNumber</td>
+					<td th:text="${booking.arrival}">ArrivalDate</td>
+					<td th:text="${booking.departure}">DepartureDate</td>
 				</tr>
 			</tbody>
 		</table>

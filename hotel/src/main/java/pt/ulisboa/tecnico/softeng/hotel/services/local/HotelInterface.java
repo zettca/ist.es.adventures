@@ -53,7 +53,22 @@ public class HotelInterface {
 		new Room( getHotelByCode(hotelCode),roomData.getNumber(), roomData.getType());
 	}
 	
-	
+	@Atomic(mode = TxMode.WRITE)
+	public static void createBooking(String hotelCode, RoomBookingData bookingData) {
+		Hotel hotel = getHotelByCode(hotelCode);
+		if(hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).contains(bookingData.getRoomType())){
+			Room room = null;
+			while((room == null) && (hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).iterator().hasNext())){
+				Room it = hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).iterator().next();
+				if(it.getType().equals(bookingData.getRoomType())){
+					room = it;
+				}
+			}
+			if(room != null){
+				new Booking(room, bookingData.getArrival(), bookingData.getDeparture());
+			}
+		}
+	}
 	
 	@Atomic(mode = TxMode.WRITE)
 	public static String reserveRoom(Room.Type type, LocalDate arrival, LocalDate departure) {
