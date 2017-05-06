@@ -35,27 +35,26 @@ public class AccountController {
         		bankOperationData.getType() , bankOperationData.getValue());
 
         	switch (bankOperationData.getType()) {
-    		case Operation.DEPOSIT:
+    		case "DEPOSIT":
     			int deposit = accountData.getBalance() + bankOperationData.getValue();
     			accountData.setBalance(deposit);
     			model.addAttribute("You have successfully deposited %d€ to your account.\n", bankOperationData.getValue());
-    			return "deposit";
-    		case WITHDRAW:
+    	        return "redirect:/banks/" + bankCode;
+    		case "WITHDRAW":
     			if(bankOperationData.getValue() - bankOperationData.getValue() >= 0){
-    				model.addAttribute("Error: It is not possible to withdraw %d€ when you only have %d€ available.\n", bankOperationData.getValue()); //how?
-    				return null;
+    				model.addAttribute("Error: It is not possible to withdraw %d€.\n", bankOperationData.getValue());
+    				model.addAttribute("You only have %d€ available.\n", accountData.getBalance());
+    		        return "redirect:/banks/" + bankCode;
     			}else{
     				int withdraw = bankOperationData.getValue() - bankOperationData.getValue();
     				accountData.setBalance(withdraw);
     				model.addAttribute("You have successfully withdrawed %d€ from your account.\n", bankOperationData.getValue());
-        			return "withdraw";
-    			}
+    		        return "redirect:/banks/" + bankCode;    			}
     		default:
     			throw new BankException();           
       
         	}
 
-        return "redirect:/banks/" + bankCode;
     }
     
 }

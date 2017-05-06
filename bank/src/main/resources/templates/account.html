@@ -17,9 +17,9 @@
 		<h3>Operations in Account</h3>
 		<p class="text-danger" th:text="${error}">Error</p>
 		<form class="form-inline" th:action="@{/banks/{bankCode}/clients/account}" th:object="${operation}" method="post">
-			<label>Account: </label> <input class="form-control" type="text" th:field="*{account.id}" /> 
-			<label>Deposit: </label> <input class="form-control" type="text" th:field="*{deposit}" /> 
-			<label>Withdraw: </label> <input class="form-control" type="text" th:field="*{withdraw}" /> 
+			<label>AccountID: </label> <input class="form-control" type="text" th:field="*{account.id}" /> 
+			<label>OperationType: </label> <input class="form-control" type="text" th:field="*{operation.type}" /> 
+			<label>Value: </label> <input class="form-control" type="text" th:field="*{operation}" /> 
 			<input class="btn btn-primary" type="submit" value="Submit" />
 		</form>
 		<br/>
