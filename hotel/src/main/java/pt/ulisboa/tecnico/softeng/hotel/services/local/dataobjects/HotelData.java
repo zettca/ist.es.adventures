@@ -8,7 +8,7 @@ import java.util.List;
 
 public class HotelData {
     public enum CopyDepth {
-        SHALLOW, ACCOUNTS, CLIENTS, OPERATIONS
+        SHALLOW, ACCOUNTS, ROOMS, OPERATIONS
     }
 
     private String name;
