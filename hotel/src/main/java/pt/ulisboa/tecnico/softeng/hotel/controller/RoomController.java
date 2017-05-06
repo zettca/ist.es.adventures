@@ -9,43 +9,52 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
-import pt.ulisboa.tecnico.softeng.hotel.controller.HotelsController;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.HotelInterface;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
-import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
-import pt.ulisboa.tecnico.softeng.hotel.services.local.HotelInterface;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelRoomData;
-import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
+import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
 
 @Controller
-@RequestMapping(value = "/Hotels/{roomCode}")
+@RequestMapping(value = "/banks/{bankCode}/clients/{id}")
 public class RoomController {
-    private static Logger logger = LoggerFactory.getLogger(RoomController.class);
+    private static Logger logger = LoggerFactory.getLogger(HotelsController.class);
 
     @RequestMapping(method = RequestMethod.GET)
-    public String roomForm(Model model) {
-        logger.info("roomForm");
-        model.addAttribute("room", new HotelRoomData());
-        model.addAttribute("hotel", HotelInterface.getHotels());
-        return "hotel";
+    public String clientForm(Model model, @PathVariable String hotelCode) {
+        logger.info("bookingForm account:{}", hotelCode);
+
+        HotelData hotelData = HotelInterface.getHotelDataByCode(hotelCode, HotelData.CopyDepth.ROOMS);
+
+        if (hotelData != null) {
+            model.addAttribute("hotel", hotelData);
+            model.addAttribute("room", new HotelRoomData());
+            model.addAttribute("rooms", hotelData.getRooms());
+            return "hotel";
+        } else {
+            model.addAttribute("error", "Error: there is no hotel with code " + hotelCode);
+            model.addAttribute("hotel", new HotelData());
+            model.addAttribute("booking", new RoomBookingData());
+            model.addAttribute("room", new HotelRoomData());
+            return "hotels";
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String bankSubmit(Model model, @PathVariable String hotelCode, @ModelAttribute HotelRoomData roomData) {
-        logger.info("roomSubmit number:{} type:{}", roomData.getNumber(), roomData.getType());
+    public String accountSubmit(Model model, @PathVariable String hotelCode, @ModelAttribute RoomBookingData bookingData) {
+        logger.info("bookingSubmit hotelCode:{} roomNumber:{}", hotelCode, bookingData.getRoomNumber());
 
         try {
-           HotelInterface.createRoom(hotelCode,roomData);
-        } catch (HotelException be) {
-            model.addAttribute("error", "Error: it was not possible to create the rom");
-            be.printStackTrace();
-            model.addAttribute("room", roomData);
-            model.addAttribute("hotel", HotelInterface.getHotels());
-            return "banks";
+            HotelInterface.createBooking(hotelCode, bookingData);
+        } catch (HotelException he) {
+            model.addAttribute("error", "Error: it was not possible to create the booking");
+            he.printStackTrace();
+            model.addAttribute("booking", bookingData.getReference());
+            model.addAttribute("room", bookingData.getRoomType());
+            model.addAttribute("hotel", bookingData.getHotelName());
+            return "hotel";
         }
 
-        return "redirect:/banks";
+        return "redirect:/hotels/" + hotelCode + "/rooms/" + bookingData.getRoomNumber();
     }
 }
