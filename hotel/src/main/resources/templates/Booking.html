@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Booking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+	<div class="container">
+		<h2>
+			Hotel Manager
+		</h2>
+		<br/>
+		<h3>Bookings in Room</h3>
+		<p class="text-danger" th:text="${error}">Error</p>
+		<form class="form-inline" th:action="@{/hotels/{hotelCode}/rooms/room}" th:object="${booking}" method="post">
+			<label>Arrival: </label> <input class="form-control" type="text" th:field="*{booking.arrival}" /> 
+			<label>Departure: </label> <input class="form-control" type="text" th:field="*{booking.departure}" /> 
+			<input class="btn btn-primary" type="submit" value="Submit" />
+		</form>
+		<br/>
+	</div>
+</body>
+</html>
