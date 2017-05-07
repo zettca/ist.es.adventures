@@ -50,9 +50,9 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static List<ActivityOfferData> getActivityOffers(String activityCode) {
+	public static List<ActivityOfferData> getActivityOffers(String providerCode, String activityCode) {
 		List<ActivityOfferData> activityOffers = new ArrayList<>();
-		Activity activity = ActivityInterface.getActivityByCode(activityCode);
+		Activity activity = ActivityInterface.getActivityByCode(getActivityProviderByCode(providerCode), activityCode);
 		if (activity != null) {
 			for (ActivityOffer activityOffer : activity.getActivityOfferSet()) {
 				activityOffers.add(new ActivityOfferData(activityOffer));
@@ -107,8 +107,8 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static Activity getActivityByCode(String code) {
-		for (Activity activity : FenixFramework.getDomainRoot().getActivitySet()) {
+	public static Activity getActivityByCode(ActivityProvider provider, String code) {
+		for (Activity activity : provider.getActivitySet()) {
 			if (activity.getCode().equals(code)) {
 				return activity;
 			}
