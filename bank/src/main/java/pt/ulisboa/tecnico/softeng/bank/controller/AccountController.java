@@ -34,9 +34,11 @@ public class AccountController {
 
         BankClientData clientData = BankInterface.getClientDataById(bankData, clid);
         if (clientData == null) {
-            model.addAttribute("error", "Error: there is no client with ID " + bankCode);
+            model.addAttribute("error", "Error: there is no client with ID " + clid);
             model.addAttribute("bank", bankData);
             model.addAttribute("client", new BankClientData());
+            model.addAttribute("clients", bankData.getClients());
+            model.addAttribute("operations", bankData.getOperations());
             return "bank";
         }
 
@@ -46,6 +48,7 @@ public class AccountController {
             model.addAttribute("bank", bankData);
             model.addAttribute("client", clientData);
             model.addAttribute("account", new BankAccountData());
+            model.addAttribute("accounts", clientData.getAccounts());
             return "client";
         }
 

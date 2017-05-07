@@ -13,10 +13,10 @@
         <h2>Banks Manager</h2>
     </div>
     <div class="row">
-        <h3>Create a new Bank</h3>
+        <p class="text-danger col-md-6" th:text="${error}">Error</p>
     </div>
     <div class="row">
-        <p class="text-danger col-md-6" th:text="${error}">Error</p>
+        <h3>Create a new Bank</h3>
     </div>
     <div class="row">
         <form class="form-inline" th:action="@{/banks}" th:object="${bank}" method="post">

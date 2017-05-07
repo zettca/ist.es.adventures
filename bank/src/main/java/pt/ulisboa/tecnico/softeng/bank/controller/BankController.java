@@ -28,6 +28,7 @@ public class BankController {
             model.addAttribute("error", "Error: there is no bank with code " + bankCode);
             model.addAttribute("bank", new BankData());
             model.addAttribute("client", new BankClientData());
+            model.addAttribute("banks", BankInterface.getBanks());
             return "banks";
         }
 
@@ -48,8 +49,11 @@ public class BankController {
         } catch (BankException be) {
             model.addAttribute("error", "Error: it was not possible to create the client");
             be.printStackTrace();
+            BankData bankData = BankInterface.getBankDataByCode(bankCode);
+            model.addAttribute("bank", bankData);
             model.addAttribute("client", clientData);
-            model.addAttribute("bank", BankInterface.getBankDataByCode(bankCode));
+            model.addAttribute("clients", bankData.getClients());
+            model.addAttribute("operations", bankData.getOperations());
             return "bank";
         }
 
@@ -63,9 +67,13 @@ public class BankController {
         try {
             BankInterface.deleteBank(bankCode);
         } catch (BankException be) {
-            model.addAttribute("error", "Error: it was not possible to create the client");
+            model.addAttribute("error", "Error: it was not possible to delete the client");
             be.printStackTrace();
-            model.addAttribute("bank", BankInterface.getBankDataByCode(bankCode));
+            BankData bankData = BankInterface.getBankDataByCode(bankCode);
+            model.addAttribute("bank", bankData);
+            model.addAttribute("client", new BankClientData());
+            model.addAttribute("clients", bankData.getClients());
+            model.addAttribute("operations", bankData.getOperations());
             return "bank";
         }
 

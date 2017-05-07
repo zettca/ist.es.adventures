@@ -32,9 +32,11 @@ public class ClientController {
 
         BankClientData clientData = BankInterface.getClientDataById(bankData, clid);
         if (clientData == null) {
-            model.addAttribute("error", "Error: there is no client with ID " + bankCode);
+            model.addAttribute("error", "Error: there is no client with ID " + clid);
             model.addAttribute("bank", bankData);
             model.addAttribute("client", new BankClientData());
+            model.addAttribute("clients", bankData.getClients());
+            model.addAttribute("operations", bankData.getOperations());
             return "bank";
         }
 
@@ -56,9 +58,11 @@ public class ClientController {
             model.addAttribute("error", "Error: it was not possible to create the account");
             be.printStackTrace();
             BankData bankData = BankInterface.getBankDataByCode(bankCode);
+            BankClientData clientData = BankInterface.getClientDataById(bankData, clid);
             model.addAttribute("bank", bankData);
-            model.addAttribute("client", BankInterface.getClientDataById(bankData, clid));
+            model.addAttribute("client", clientData);
             model.addAttribute("account", accountData);
+            model.addAttribute("accounts", clientData.getAccounts());
             return "client";
         }
 
