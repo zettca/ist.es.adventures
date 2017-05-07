@@ -13,6 +13,7 @@ public class HotelData {
     private String name;
     private String code;
     private List<HotelRoomData> rooms = new ArrayList<>();
+    private List<RoomBookingData> bookings = new ArrayList<>();
 
     public HotelData() {
     }
@@ -22,12 +23,16 @@ public class HotelData {
     	this.name = hotel.getName();
         
         switch (depth) {
-        	case HOTELS:
-        		break;
         	case ROOMS:
-        		break;
+        		for (Room room : hotel.getRoomSet()) {
+                    this.rooms.add(new HotelRoomData(room));
+                }
         	case BOOKINGS:
-                break;
+        		for(Room room : hotel.getRoomSet()){
+        			for (Booking booking : room.getBookingSet()) {
+        				this.bookings.add(new RoomBookingData(room, booking));
+        			}
+                }
         	case SHALLOW:
         		break;
             default:
