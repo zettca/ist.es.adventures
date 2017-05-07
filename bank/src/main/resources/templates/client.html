@@ -17,7 +17,7 @@
 		<h3>Create New Account</h3>
 		<p class="text-danger" th:text="${error}">Error</p>
 		<form class="form-inline" th:action="@{/banks/{bankCode}/clients/{id}}" th:object="${account}" method="post">
-			<label>Bank: </label> <input class="form-control" type="text" th:field="*{code}" /> 
+			<label>Bank Code: </label> <input class="form-control" type="text" th:field="*{code}" /> 
 			<label>Client Name: </label> <input class="form-control" type="text" th:field="*{client}" /> 
 			<input class="btn btn-primary" type="submit" value="Submit" />
 		</form>
@@ -33,7 +33,7 @@
 			</thead>
 			<tbody>
 				<tr th:each="account: ${account}">
-					<td th:text="${account.code}">AccountID</td>
+					<td th:text="${account.id}">AccountID</td>
 					<td th:text="${account.IBAN}">IBAN</td>
 					<td th:text="${account.Balance}">Balance</td>
 				</tr>

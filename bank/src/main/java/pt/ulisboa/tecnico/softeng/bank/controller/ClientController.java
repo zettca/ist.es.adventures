@@ -13,6 +13,7 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
+
 @Controller
 @RequestMapping(value = "/banks/{bankCode}/clients/{id}")
 public class ClientController {
@@ -22,7 +23,7 @@ public class ClientController {
     public String clientForm(Model model, @PathVariable String bankCode) {
         logger.info("accountForm account:{}", bankCode);
 
-        BankData bankData = BankInterface.getBankDataByCode(bankCode, BankData.CopyDepth.CLIENTS);
+        BankData bankData = BankInterface.getBankDataByCode(bankCode, BankData.CopyDepth.ACCOUNTS);
 
         if (bankData != null) {
             model.addAttribute("bank", bankData);
@@ -32,7 +33,6 @@ public class ClientController {
         } else {
             model.addAttribute("error", "Error: there is no bank with code " + bankCode);
             model.addAttribute("bank", new BankData());
-            model.addAttribute("client", new BankClientData());
             model.addAttribute("account", new BankAccountData());
             return "banks";
         }

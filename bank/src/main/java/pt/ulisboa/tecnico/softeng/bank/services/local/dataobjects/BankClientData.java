@@ -5,7 +5,7 @@ import pt.ulisboa.tecnico.softeng.bank.domain.Client;
 public class BankClientData {
     private String id;
     private String name;
-
+   
     public BankClientData() {
     }
 
