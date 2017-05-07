@@ -26,7 +26,7 @@ public class HotelsController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String hotelSubmit(Model model, @ModelAttribute HotelData hotelData) {
-        logger.info("hotelSubmit name:{} code:{}", hotelData.getCode(), hotelData.getName());
+        logger.info("hotelSubmit name:{} code:{}", hotelData.getName(), hotelData.getCode());
 
         try {
         	HotelInterface.createHotel(hotelData);

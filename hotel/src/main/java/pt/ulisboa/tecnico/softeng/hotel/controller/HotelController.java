@@ -8,44 +8,51 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-
-import pt.ulisboa.tecnico.softeng.hotel.controller.HotelsController;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.HotelInterface;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
-import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
-import pt.ulisboa.tecnico.softeng.hotel.services.local.HotelInterface;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelRoomData;
-import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
 
 @Controller
-@RequestMapping(value = "/Hotels/{roomCode}")
+@RequestMapping(value = "/hotels/{hotelCode}")
 public class HotelController {
     private static Logger logger = LoggerFactory.getLogger(HotelController.class);
 
     @RequestMapping(method = RequestMethod.GET)
-    public String roomForm(Model model) {
+    public String roomForm(Model model, @PathVariable String hotelCode) {
         logger.info("roomForm");
+
+        HotelData hotelData = HotelInterface.getHotelDataByCode(hotelCode);
+        if (hotelData == null) {
+            model.addAttribute("error", "Error: there is no hotel with code " + hotelCode);
+            model.addAttribute("hotel", new HotelData());
+            model.addAttribute("room", new HotelRoomData());
+            return "hotel";
+        }
+
         model.addAttribute("room", new HotelRoomData());
-        model.addAttribute("hotel", HotelInterface.getHotels());
+        model.addAttribute("rooms", hotelData.getRooms());
+        model.addAttribute("hotel", HotelInterface.getHotelDataByCode(hotelCode));
         return "hotel";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String bankSubmit(Model model, @PathVariable String hotelCode, @ModelAttribute HotelRoomData roomData) {
+    public String roomSubmit(Model model, @PathVariable String hotelCode, @ModelAttribute HotelRoomData roomData) {
         logger.info("roomSubmit number:{} type:{}", roomData.getNumber(), roomData.getType());
 
+        HotelData hotelData = HotelInterface.getHotelDataByCode(hotelCode);
+
         try {
-           HotelInterface.createRoom(hotelCode,roomData);
+            HotelInterface.createRoom(hotelCode, roomData);
         } catch (HotelException be) {
             model.addAttribute("error", "Error: it was not possible to create the rom");
             be.printStackTrace();
             model.addAttribute("room", roomData);
-            model.addAttribute("hotel", HotelInterface.getHotels());
-            return "banks";
+            model.addAttribute("rooms", hotelData.getRooms());
+            model.addAttribute("hotel", hotelData);
+            return "hotel";
         }
 
-        return "redirect:/banks";
+        return "redirect:/hotels/" + hotelCode;
     }
 }

@@ -23,8 +23,17 @@
         <p class="text-danger col-md-6" th:text="${error}">Error</p>
     </div>
     <div class="row">
-        <form class="form-inline" th:action="@{/hotels/{code}(code=${hotel.code})}" th:object="${room}"
-              method="post">
+        <form class="form-inline" th:action="@{/hotels/{code}(code=${hotel.code})}" th:object="${room}" method="post">
+            <div class="form-group">
+                <label>
+                    <span>Type: </span>
+                    <select class="form-control" th:field="*{type}">
+                        <option th:value="${type}" th:text="${type}"
+                                th:each="type:${T(pt.ulisboa.tecnico.softeng.hotel.domain.Room.Type).values()}">
+                        </option>
+                    </select>
+                </label>
+            </div>
             <div class="form-group">
                 <label>
                     <span>Number: </span>
@@ -40,7 +49,7 @@
         <h3>Existing Rooms</h3>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -51,7 +60,10 @@
                 <tbody>
                 <tr th:each="room: ${rooms}">
                     <td th:text="${room.number}">Number</td>
-                    <td><a th:href="@{/hotels/{number}/rooms/{type}(number=${room.number}, type=${room.type})}">Page</a></td>
+                    <td th:text="${room.type}">Type</td>
+                    <td>
+                        <a th:href="@{/hotels/{code}/rooms/{num}(code=${hotel.code}, num=${room.number})}">Page</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
