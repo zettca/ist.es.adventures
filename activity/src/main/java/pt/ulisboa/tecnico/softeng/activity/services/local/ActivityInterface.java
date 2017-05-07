@@ -51,6 +51,17 @@ public class ActivityInterface {
 		new ActivityOffer(activityOfferData.getActivity(), activityOfferData.getBegin(), activityOfferData.getEnd());
 	}
 
+	@Atomic(mode = TxMode.READ)
+	public static List<ActivityOfferData> getActivityOffers(String activityCode) {
+		List<ActivityOfferData> activityOffers = new ArrayList<>();
+		Activity activity = ActivityInterface.getActivityByCode(activityCode);
+		if (activity != null) {
+			for (ActivityOffer activityOffer : activity.getActivityOfferSet()) {
+				activityOffers.add(new ActivityOfferData(activityOffer));
+			}
+		}
+		return activityOffers;
+	}
 
 	@Atomic(mode = TxMode.WRITE)
 	public static String reserveActivity(LocalDate begin, LocalDate end, int age) {
@@ -92,6 +103,16 @@ public class ActivityInterface {
 		for (ActivityProvider activityProvider : FenixFramework.getDomainRoot().getActivityProviderSet()) {
 			if (activityProvider.getCode().equals(code)) {
 				return activityProvider;
+			}
+		}
+		return null;
+	}
+
+	@Atomic(mode = TxMode.READ)
+	public static Activity getActivityByCode(String code) {
+		for (Activity activity : FenixFramework.getDomainRoot().getActivitySet()) {
+			if (activity.getCode().equals(code)) {
+				return activity;
 			}
 		}
 		return null;

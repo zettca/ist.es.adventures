@@ -13,10 +13,11 @@ public class ActivityOfferData {
 
 	private int capacity;
 
+
 	public ActivityOfferData() {
 	}
 
-	public void ActivitOfferData(ActivityOffer offer) {
+	public ActivityOfferData(ActivityOffer offer) {
 		this.activity = offer.getActivity();
 		this.begin = offer.getBegin();
 		this.end = offer.getEnd();
@@ -55,4 +56,6 @@ public class ActivityOfferData {
 	public void setCapacidade(int capacity) {
 		this.capacity = capacity;
 	}
+	
+
 }
