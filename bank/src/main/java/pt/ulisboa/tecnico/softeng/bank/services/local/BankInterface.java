@@ -12,7 +12,6 @@ import pt.ulisboa.tecnico.softeng.bank.exception.BankException;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
-import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData.CopyDepth;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankOperationData;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class BankInterface {
 	public static List<BankData> getBanks() {
 		List<BankData> banks = new ArrayList<>();
 		for (Bank bank : FenixFramework.getDomainRoot().getBankSet()) {
-			banks.add(new BankData(bank, CopyDepth.SHALLOW));
+			banks.add(new BankData(bank));
 		}
 		return banks;
 	}
@@ -34,15 +33,9 @@ public class BankInterface {
 		new Bank(bankData.getName(), bankData.getCode());
 	}
 
-	@Atomic(mode = TxMode.READ)
-	public static BankData getBankDataByCode(String bankCode, CopyDepth depth) {
-		Bank bank = getBankByCode(bankCode);
-
-		if (bank != null) {
-			return new BankData(bank, depth);
-		} else {
-			return null;
-		}
+	@Atomic(mode = TxMode.WRITE)
+	public static void deleteBank(String bankCode) {
+		getBankByCode(bankCode).delete();
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -51,15 +44,53 @@ public class BankInterface {
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void createAccount(String bankCode, BankAccountData accountData) {
+	public static void createAccount(String bankCode, String clid) {
 		Bank bank = getBankByCode(bankCode);
-		new Account(bank, getClientByID(bank, accountData.getId()));
+		new Account(bank, getClientByID(bank, clid));
 	}
 
 	@Atomic(mode = TxMode.WRITE)
-	public static void createOperation(String bankCode, BankOperationData opData) {
+	public static void createOperation(String bankCode, BankOperationData operationData) {
+		Account account = getAccountByIBAN(getBankByCode(bankCode), operationData.getIban());
+		if (Type.valueOf(operationData.getType()).equals(Type.DEPOSIT)) {
+			account.deposit(operationData.getValue());
+		} else if (Type.valueOf(operationData.getType()).equals(Type.WITHDRAW)) {
+			account.withdraw(operationData.getValue());
+		}
+	}
+
+	@Atomic(mode = TxMode.READ)
+	public static BankData getBankDataByCode(String bankCode) {
 		Bank bank = getBankByCode(bankCode);
-		new Operation(Type.valueOf(opData.getType()), getAccountByIBAN(bank, opData.getIban()), opData.getValue());
+		return (bank != null) ? new BankData(bank) : null;
+	}
+
+	public static BankClientData getClientDataById(BankData bankData, String clid) {
+		for (BankClientData clientData : bankData.getClients()) {
+			if (clientData.getId().equals(clid)) {
+				return clientData;
+			}
+		}
+		return null;
+	}
+
+	public static BankAccountData getAccountDataByIban(BankClientData clientData, String iban) {
+		for (BankAccountData accountData : clientData.getAccounts()) {
+			if (accountData.getIban().equals(iban)) {
+				return accountData;
+			}
+		}
+		return null;
+	}
+
+	public static List<BankOperationData> getAccountOperations(BankData bankData, String iban) {
+		List<BankOperationData> operations = new ArrayList<>();
+		for (BankOperationData op : bankData.getOperations()) {
+			if (op.getIban().equals(iban)) {
+				operations.add(op);
+			}
+		}
+		return operations;
 	}
 
 	@Atomic(mode = TxMode.WRITE)
@@ -118,6 +149,7 @@ public class BankInterface {
 		return null;
 	}
 
+	@Atomic(mode = TxMode.READ)
 	private static Account getAccountByIBAN(Bank bank, String iban) {
 		for (Account account : bank.getAccountSet()) {
 			if (account.getIBAN().equals(iban)) {
@@ -126,5 +158,4 @@ public class BankInterface {
 		}
 		return null;
 	}
-
 }

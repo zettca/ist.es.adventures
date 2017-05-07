@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bank Manager</title>
-
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
     <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
@@ -13,18 +11,26 @@
 <div class="container">
     <div class="row">
         <h2>
-            <span th:text="${bank.name}">Bank</span> Manager
+            <a th:href="@{/banks}">Banks</a>
+            <span> → </span>
+            <span th:text="${bank.name}">Bank</span>
         </h2>
-    </div>
-    <div class="row">
-        <h3>Create a new Client</h3>
     </div>
     <div class="row">
         <p class="text-danger col-md-6" th:text="${error}">Error</p>
     </div>
     <div class="row">
-        <form class="form-inline" th:action="@{/banks/{code}(code=${bank.code})}" th:object="${client}"
-              method="post">
+        <form class="form-inline" th:action="@{/banks/{code}/delete(code=${bank.code})}" method="post">
+            <div class="form-group">
+                <input class="btn btn-danger" type="submit" value="Delete Bank"/>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <h3>Create a new Client</h3>
+    </div>
+    <div class="row">
+        <form class="form-inline" th:action="@{/banks/{code}(code=${bank.code})}" th:object="${client}" method="post">
             <div class="form-group">
                 <label>
                     <span>Name: </span>
@@ -40,16 +46,18 @@
         <h3>Existing Clients</h3>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Page</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="client: ${clients}">
+                    <td th:text="${client.id}">ID</td>
                     <td th:text="${client.name}">Name</td>
                     <td><a th:href="@{/banks/{code}/clients/{cid}(code=${bank.code}, cid=${client.id})}">Page</a></td>
                 </tr>
@@ -74,11 +82,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="op: ${operations}">
-                    <td th:text="${op.reference}">Name</td>
-                    <td th:text="${op.iban}">Name</td>
-                    <td th:text="${op.time}">Name</td>
-                    <td th:text="${op.type}">Name</td>
-                    <td th:text="${op.value}">Name</td>
+                    <td th:text="${op.reference}">Reference</td>
+                    <td th:text="${op.iban}">IBAN</td>
+                    <td th:text="${op.time}">Time</td>
+                    <td th:text="${op.type}">Type</td>
+                    <td th:text="${op.value}">Value</td>
                 </tr>
                 </tbody>
             </table>

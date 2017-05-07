@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BankData {
-    public enum CopyDepth {
-        SHALLOW, ACCOUNTS, CLIENTS, OPERATIONS
-    }
 
     private String name;
     private String code;
@@ -22,30 +19,18 @@ public class BankData {
     public BankData() {
     }
 
-    public BankData(Bank bank, CopyDepth depth) {
+    public BankData(Bank bank) {
         this.name = bank.getName();
         this.code = bank.getCode();
 
-        switch (depth) {
-            case CLIENTS:
-                for (Client client : bank.getClientSet()) {
-                    this.clients.add(new BankClientData(client));
-                }
-                break;
-            case ACCOUNTS:
-                for (Account account : bank.getAccountSet()) {
-                    this.accounts.add(new BankAccountData(account));
-                }
-                break;
-            case OPERATIONS:
-                for (Operation operation : bank.getOperationSet()) {
-                    this.operations.add(new BankOperationData(operation));
-                }
-                break;
-            case SHALLOW:
-                break;
-            default:
-                break;
+        for (Client client : bank.getClientSet()) {
+            this.clients.add(new BankClientData(client));
+        }
+        for (Account account : bank.getAccountSet()) {
+            this.accounts.add(new BankAccountData(account));
+        }
+        for (Operation operation : bank.getOperationSet()) {
+            this.operations.add(new BankOperationData(operation));
         }
     }
 

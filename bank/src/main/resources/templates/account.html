@@ -1,28 +1,77 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Account</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet"
-	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
-<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+	<title>Account Manager</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+	<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
 	<div class="container">
-		<h2>
-			Bank Manager
-		</h2>
-		<br/>
-		<h3>Operations in Account</h3>
-		<p class="text-danger" th:text="${error}">Error</p>
-		<form class="form-inline" th:action="@{/banks/{bankCode}/clients/account}" th:object="${operation}" method="post">
-			<label>Account: </label> <input class="form-control" type="text" th:field="*{account.id}" /> 
-			<label>Deposit: </label> <input class="form-control" type="text" th:field="*{deposit}" /> 
-			<label>Withdraw: </label> <input class="form-control" type="text" th:field="*{withdraw}" /> 
-			<input class="btn btn-primary" type="submit" value="Submit" />
-		</form>
-		<br/>
+		<div class="row">
+			<h2>
+				<a th:href="@{/banks}">Banks</a>
+				<span> → </span>
+				<a th:href="@{/banks/{code}(code=${bank.code})}" th:text="${bank.name}">Bank</a>
+				<span> → </span>
+				<a th:href="@{/banks/{code}/clients/{clid}(code=${bank.code}, clid=${client.id})}"
+				   th:text="${client.name}">Client</a>
+				<span> → </span>
+				<span th:text="${account.iban}">Account</span>
+			</h2>
+		</div>
+		<div class="row">
+			<p class="text-danger" th:text="${error}">Error</p>
+		</div>
+		<div class="row">
+			<h3>Create a new Operation</h3>
+		</div>
+		<div class="row">
+			<form class="form-inline"
+				  th:action="@{/banks/{code}/clients/{clid}/accounts/{iban}(code=${bank.code}, clid=${client.id}, iban=${account.iban})}"
+				  th:object="${operation}" method="post">
+				<label>
+					Type:
+					<select class="form-control" th:field="*{type}">
+						<option
+								th:each="type:${T(pt.ulisboa.tecnico.softeng.bank.domain.Operation.Type).values()}"
+								th:value="${type}" th:text="${type}">
+						</option>
+					</select>
+				</label>
+				<label>
+					Value:
+					<input class="form-control" type="number" th:field="*{value}"/>
+				</label>
+				<input class="btn btn-primary" type="submit" value="Submit"/>
+			</form>
+		</div>
+		<div class="row">
+			<h3>Existing Operations</h3>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th>Reference</th>
+						<th>Time</th>
+						<th>Type</th>
+						<th>Value</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="op: ${operations}">
+						<td th:text="${op.reference}">Reference</td>
+						<td th:text="${op.time}">Time</td>
+						<td th:text="${op.type}">Type</td>
+						<td th:text="${op.value}">Value</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

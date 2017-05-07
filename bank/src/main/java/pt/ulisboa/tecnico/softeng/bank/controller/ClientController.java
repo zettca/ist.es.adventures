@@ -14,50 +14,53 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountDat
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
 @Controller
-@RequestMapping(value = "/banks/{bankCode}/clients/{id}")
+@RequestMapping(value = "/banks/{bankCode}/clients/{clid}")
 public class ClientController {
     private static Logger logger = LoggerFactory.getLogger(BanksController.class);
 
     @RequestMapping(method = RequestMethod.GET)
-    public String clientForm(Model model, @PathVariable String bankCode) {
-        logger.info("accountForm account:{}", bankCode);
+    public String clientForm(Model model, @PathVariable String bankCode, @PathVariable String clid) {
+        logger.info("clientForm bank:{} clid:{}", bankCode, clid);
 
-        BankData bankData = BankInterface.getBankDataByCode(bankCode, BankData.CopyDepth.CLIENTS);
-
-        if (bankData != null) {
-            model.addAttribute("bank", bankData);
-            model.addAttribute("account", new BankAccountData());
-            model.addAttribute("accounts", bankData.getAccounts());
-            return "bank";
-        } else {
+        BankData bankData = BankInterface.getBankDataByCode(bankCode);
+        if (bankData == null) {
             model.addAttribute("error", "Error: there is no bank with code " + bankCode);
             model.addAttribute("bank", new BankData());
-            model.addAttribute("client", new BankClientData());
-            model.addAttribute("account", new BankAccountData());
             return "banks";
         }
+
+        BankClientData clientData = BankInterface.getClientDataById(bankData, clid);
+        if (clientData == null) {
+            model.addAttribute("error", "Error: there is no client with ID " + bankCode);
+            model.addAttribute("bank", bankData);
+            model.addAttribute("client", new BankClientData());
+            return "bank";
+        }
+
+        model.addAttribute("bank", bankData);
+        model.addAttribute("client", clientData);
+        model.addAttribute("account", new BankAccountData());
+        model.addAttribute("accounts", clientData.getAccounts());
+        return "client";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String accountSubmit(Model model, @PathVariable String bankCode, @ModelAttribute BankClientData clientData) {
-        logger.info("accountSubmit bankCode:{} client:{}", bankCode, clientData.getName());
+    public String clientSubmit(Model model, @PathVariable String bankCode, @PathVariable String clid,
+                               @ModelAttribute BankAccountData accountData) {
+        logger.info("clientSubmit bank:{} clid:{} | IBAN:{}", bankCode, clid, accountData.getIban());
 
         try {
-            BankInterface.createAccount(bankCode, BankAccountData());
+            BankInterface.createAccount(bankCode, clid);
         } catch (BankException be) {
             model.addAttribute("error", "Error: it was not possible to create the account");
             be.printStackTrace();
-            model.addAttribute("id", BankAccountData().getId());
-            model.addAttribute("iban", BankAccountData().getIban());
-            model.addAttribute("balance", BankAccountData().getBalance());
-            return "bank";
+            BankData bankData = BankInterface.getBankDataByCode(bankCode);
+            model.addAttribute("bank", bankData);
+            model.addAttribute("client", BankInterface.getClientDataById(bankData, clid));
+            model.addAttribute("account", accountData);
+            return "client";
         }
 
-        return "redirect:/banks/" + bankCode;
+        return "redirect:/banks/" + bankCode + "/clients/" + clid;
     }
-
-	private BankAccountData BankAccountData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
