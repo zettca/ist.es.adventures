@@ -9,13 +9,14 @@
     <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
+
 <body>
 <div class="container">
     <div class="row">
-        <h2>ActivityProvider Manager</h2>
+        <h2>ActivityOffer Manager</h2>
     </div>
     <div class="row">
-        <h3>Create a new ActivityProvider</h3>
+        <h3>Create a new ActivityOffer</h3>
     </div>
     <div class="row">
         <p class="text-danger col-md-6" th:text="${error}">Error</p>
@@ -38,30 +39,7 @@
                 <input class="btn btn-primary" type="submit" value="Submit"/>
             </div>
         </form>
-    </div>
-    <div class="row">
-        <h3>Existing ActivityProviders</h3>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Page</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="activityProvider: ${activityProviders}">
-                    <td th:text="${activityProvider.name}">Name</td>
-                    <td th:text="${activityProvider.code}">Code</td>
-                    <td><a th:href="@{/activityProviders/{code}(code=${activityProvider.code})}">Page</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+
+
 </body>
 </html>
