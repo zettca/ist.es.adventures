@@ -16,7 +16,7 @@ import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelRoomData
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
 
 @Controller
-@RequestMapping(value = "/banks/{bankCode}/clients/{id}")
+@RequestMapping(value = "/hotels/{hotelCode}/rooms/{roomNumber}")
 public class RoomController {
     private static Logger logger = LoggerFactory.getLogger(HotelsController.class);
 
