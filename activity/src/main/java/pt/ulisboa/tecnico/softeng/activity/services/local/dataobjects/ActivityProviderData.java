@@ -1,38 +1,25 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects;
 
-import java.util.List;
+import pt.ulisboa.tecnico.softeng.activity.domain.Activity;
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider;
 
-public class ActivityProviderData {
-	public enum CopyDepth {
-		SHALLOW, ACTIVITY, ACTIVITYOFFER, BOOKING
-	}
+import java.util.ArrayList;
+import java.util.List;
 
+public class ActivityProviderData {
 	private String name;
 	private String code;
-	private List<ActivityData> activities;
+	private List<ActivityData> activities = new ArrayList<>();
 
 	public ActivityProviderData() {
 	}
 
-	public ActivityProviderData(ActivityProvider activity, CopyDepth depth) {
-		this.name = activity.getName();
-		this.code = activity.getCode();
+	public ActivityProviderData(ActivityProvider provider) {
+		this.name = provider.getName();
+		this.code = provider.getCode();
 
-		switch(depth) {
-		case ACTIVITY:
-			//TODO
-			break;
-		case ACTIVITYOFFER:
-			//TODO
-			break;
-		case BOOKING:
-			//TODO
-			break;
-		case SHALLOW:
-			break;
-		default:
-			break;
+		for (Activity activity : provider.getActivitySet()) {
+			activities.add(new ActivityData(activity));
 		}
 	}
 
@@ -52,8 +39,11 @@ public class ActivityProviderData {
 		this.code = code;
 	}
 
-
 	public List<ActivityData> getActivities() {
 		return activities;
+	}
+
+	public void setActivities(List<ActivityData> activities) {
+		this.activities = activities;
 	}
 }
