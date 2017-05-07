@@ -1,13 +1,9 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects;
 
 import org.joda.time.LocalDate;
-
-import pt.ulisboa.tecnico.softeng.activity.domain.Activity;
 import pt.ulisboa.tecnico.softeng.activity.domain.ActivityOffer;
 
 public class ActivityOfferData {
-
-	private Activity activity;
 	private LocalDate begin;
 	private LocalDate end;
 
@@ -18,19 +14,9 @@ public class ActivityOfferData {
 	}
 
 	public ActivityOfferData(ActivityOffer offer) {
-		this.activity = offer.getActivity();
 		this.begin = offer.getBegin();
 		this.end = offer.getEnd();
 		this.capacity = offer.getCapacity();
-	}
-
-
-	public Activity getActivity() {
-		return activity;
-	}
-
-	public void setActivity(Activity activity) {
-		this.activity = activity;
 	}
 
 	public LocalDate getBegin() {

@@ -45,8 +45,9 @@ public class ActivityInterface {
 	}
 	
 	@Atomic(mode = TxMode.WRITE)
-	public static void createActivityOffer(ActivityOfferData activityOfferData) {
-		new ActivityOffer(activityOfferData.getActivity(), activityOfferData.getBegin(), activityOfferData.getEnd());
+	public static void createActivityOffer(String providerCode, String activityCode, ActivityOfferData activityOfferData) {
+		new ActivityOffer(getActivityByCode(getActivityProviderByCode(providerCode), activityCode),
+				activityOfferData.getBegin(), activityOfferData.getEnd());
 	}
 
 	@Atomic(mode = TxMode.READ)
@@ -107,10 +108,19 @@ public class ActivityInterface {
 	}
 
 	@Atomic(mode = TxMode.READ)
-	public static Activity getActivityByCode(ActivityProvider provider, String code) {
+	public static Activity getActivityByCode(ActivityProvider provider, String activityCode) {
 		for (Activity activity : provider.getActivitySet()) {
-			if (activity.getCode().equals(code)) {
+			if (activity.getCode().equals(activityCode)) {
 				return activity;
+			}
+		}
+		return null;
+	}
+
+	public static ActivityData getActivityDataByCode(ActivityProviderData providerData, String activityCode) {
+		for (ActivityData activityData : providerData.getActivities()) {
+			if (activityData.getCode().equals(activityCode)) {
+				return activityData;
 			}
 		}
 		return null;
