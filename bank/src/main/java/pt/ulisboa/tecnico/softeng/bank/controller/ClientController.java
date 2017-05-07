@@ -13,6 +13,7 @@ import pt.ulisboa.tecnico.softeng.bank.services.local.BankInterface;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankAccountData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankClientData;
 import pt.ulisboa.tecnico.softeng.bank.services.local.dataobjects.BankData;
+
 @Controller
 @RequestMapping(value = "/banks/{bankCode}/clients/{clid}")
 public class ClientController {

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hotel Manager</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+    <script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2>
+            <span th:text="${hotel.name}">Hotel</span> Manager
+        </h2>
+    </div>
+    <div class="row">
+        <h3>Create a new Room</h3>
+    </div>
+    <div class="row">
+        <p class="text-danger col-md-6" th:text="${error}">Error</p>
+    </div>
+    <div class="row">
+        <form class="form-inline" th:action="@{/hotels/{code}(code=${hotel.code})}" th:object="${room}"
+              method="post">
+            <div class="form-group">
+                <label>
+                    <span>Number: </span>
+                    <input class="form-control" type="text" th:field="*{number}"/>
+                </label>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <h3>Existing Rooms</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room: ${rooms}">
+                    <td th:text="${room.number}">Number</td>
+                    <td><a th:href="@{/hotels/{number}/rooms/{type}(number=${room.number}, type=${room.type})}">Page</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -80,4 +80,5 @@ public class AccountController {
 
         return "redirect:/banks/" + bankCode + "/clients/" + clid + "/accounts/" + iban;
     }
+
 }

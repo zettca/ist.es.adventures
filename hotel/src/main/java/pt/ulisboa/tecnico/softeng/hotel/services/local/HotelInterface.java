@@ -14,10 +14,12 @@ import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Booking;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Hotel;
 import pt.ulisboa.tecnico.softeng.hotel.domain.Room;
+import pt.ulisboa.tecnico.softeng.hotel.domain.Room.Type;
 import pt.ulisboa.tecnico.softeng.hotel.exception.HotelException;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.RoomBookingData;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData;
 import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelData.CopyDepth;
+import pt.ulisboa.tecnico.softeng.hotel.services.local.dataobjects.HotelRoomData;
 
 public class HotelInterface {
 
@@ -43,6 +45,28 @@ public class HotelInterface {
 			return new HotelData(hotel, depth);
 		} else {
 			return null;
+		}
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	public static void createRoom(String hotelCode, HotelRoomData roomData) {
+		new Room( getHotelByCode(hotelCode),roomData.getNumber(), roomData.getType());
+	}
+	
+	@Atomic(mode = TxMode.WRITE)
+	public static void createBooking(String hotelCode, RoomBookingData bookingData) {
+		Hotel hotel = getHotelByCode(hotelCode);
+		if(hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).contains(bookingData.getRoomType())){
+			Room room = null;
+			while((room == null) && (hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).iterator().hasNext())){
+				Room it = hotel.getAvailableRooms(bookingData.getArrival(), bookingData.getDeparture()).iterator().next();
+				if(it.getType().equals(bookingData.getRoomType())){
+					room = it;
+				}
+			}
+			if(room != null){
+				new Booking(room, bookingData.getArrival(), bookingData.getDeparture());
+			}
 		}
 	}
 	
