@@ -36,8 +36,8 @@
 				<tr th:each="booking: ${booking}">
 					<td th:text="${booking.room.type}">RoomType</td>
 					<td th:text="${booking.room.number}">RoomNumber</td>
-					<td th:text="${booking.arrival}">ArrivalDate</td>
-					<td th:text="${booking.departure}">DepartureDate</td>
+					<td th:text="${booking.arrival}">ArrivalDate(yyyy-mm-dd)</td>
+					<td th:text="${booking.departure}">DepartureDate(yyyy-mm-dd)</td>
 				</tr>
 			</tbody>
 		</table>
