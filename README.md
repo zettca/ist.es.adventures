@@ -10,7 +10,7 @@ To run tests execute: `mvn clean install`
 | 77913      | Adrian Quaresma         | adrianquaresma@gmail.com| AdrianQuaresma | Activity  |
 | 79767      | Pedro Brás              | qwelas007@gmail.com     | qwelas         | Hotel     |
 | 78087      | Joana Pereira           | joanaazambuja@gmail.com |  Jkrok         |Activity   |
-|            |                         |                         |                |           |
+| 70575      | Joao Calafate           | joaocalafate@gmail.com  | calans         | Activity  |
 |            |                         |                         |                |           |
 |            |                         |                         |                |           |
  
