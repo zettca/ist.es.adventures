@@ -11,16 +11,17 @@
 <body>
 	<div class="container">
 		<h2>
-			Activity Provider Manager
+			Activity Manager
 		</h2>
 		<br/>
 		<h3>Create New Activity</h3>
 		<p class="text-danger" th:text="${error}">Error</p>
-		<form class="form-inline" th:action="@{/activityProviders/{activityProvider}}" th:object="${activity}" method="post">
-			<label>Activity Name: </label> <input class="form-control" type="text" th:field="*{activity.name}" /> 
-			<label>Activity MinAge: </label> <input class="form-control" type="number" th:field="*{activity.minAge}" /> 
-			<label>Activity MaxAge: </label> <input class="form-control" type="number" th:field="*{activity.maxAge}" /> 
-			<label>Activity Capacity: </label> <input class="form-control" type="number" th:field="*{activity.capacity}" /> 
+		<form class="form-inline" th:object="${activity}" method="post"
+			  th:action="@{/activityProviders/{code}(code=${provider.code})}">
+			<label>Name: </label> <input class="form-control" type="text" th:field="*{name}"/>
+			<label>MinAge: </label> <input class="form-control" type="number" min="18" max="100" th:field="*{minAge}"/>
+			<label>MaxAge: </label> <input class="form-control" type="number" min="18" max="100" th:field="*{maxAge}"/>
+			<label>Capacity: </label> <input class="form-control" type="number" th:field="*{capacity}"/>
 			<input class="btn btn-primary" type="submit" value="Submit" />
 		</form>
 		<br/>
@@ -28,18 +29,22 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>ActivityName</th>
-					<th>ActivityMinAge</th>
-					<th>ActivityMaxAge</th>
-					<th>ActivityCapacity</th>
+					<th>Name</th>
+					<th>MinAge</th>
+					<th>MaxAge</th>
+					<th>Capacity</th>
+					<th>Page</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="activity: ${activity}">
-					<td th:text="${activity.name}">ActivityName</td>
-					<td th:text="${activity.minAge}">MinAge</td>
-					<td th:text="${activity.maxAge}">MaxAge</td>
-					<td th:text="${activity.capacity}">Capacity</td>
+			<tr th:each="activity: ${activities}">
+				<td th:text="${activity.name}">ActivityName</td>
+				<td th:text="${activity.minAge}">MinAge</td>
+				<td th:text="${activity.maxAge}">MaxAge</td>
+				<td th:text="${activity.capacity}">Capacity</td>
+				<td>
+					<a th:href="@{/activityProviders/{code}/activities/{code2}(code=${provider.code}, code2=${activity.code})}">Page</a>
+				</td>
 				</tr>
 			</tbody>
 		</table>

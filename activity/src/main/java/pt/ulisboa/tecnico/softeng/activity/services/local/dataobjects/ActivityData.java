@@ -1,33 +1,23 @@
 package pt.ulisboa.tecnico.softeng.activity.services.local.dataobjects;
 
 import pt.ulisboa.tecnico.softeng.activity.domain.Activity;
-import pt.ulisboa.tecnico.softeng.activity.domain.ActivityProvider;
 
 public class ActivityData {
-	private ActivityProvider provider; 
-	private String name; 
+	private String name;
+	private String code;
 	private int minAge; 
 	private int maxAge; 
 	private int capacity;
 
-   
-    public ActivityData() {
-    }
-
-    public ActivityData(Activity activity) {
-    	this.setProvider(activity.getActivityProvider());
-    	this.setName(activity.getName());
-    	this.setMinAge(activity.getMinAge());
-    	this.setMaxAge(activity.getMaxAge());
-    	this.setCapacity(activity.getCapacity());
-    }
-
-	public ActivityProvider getProvider() {
-		return provider;
+	public ActivityData() {
 	}
 
-	public void setProvider(ActivityProvider provider) {
-		this.provider = provider;
+	public ActivityData(Activity activity) {
+		this.name = activity.getName();
+		this.code = activity.getCode();
+		this.minAge = activity.getMinAge();
+		this.maxAge = activity.getMaxAge();
+		this.capacity = activity.getCapacity();
 	}
 
 	public String getName() {
@@ -36,6 +26,14 @@ public class ActivityData {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public int getMinAge() {
